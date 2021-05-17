@@ -1,2 +1,10 @@
+comtypes==1.1.10
+pocketsphinx==0.1.15
 PyAudio==0.2.11
+pypiwin32==223
+pyttsx3==2.90
+pywin32==300
+selenium==3.141.0
 SpeechRecognition==3.8.1
+urllib3==1.26.4
+word2number==1.1
