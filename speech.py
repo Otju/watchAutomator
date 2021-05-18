@@ -82,12 +82,25 @@ while True:
                     browser.selectPoster(selectedNumber)
                 if("epi" in parameters[0]):
                     browser.selectEpisode(selectedNumber)
-            elif("search" in command):
-                print("search")
+            elif("save" in command):
+                print("save")
+                browser.save(" ".join(parameters))
+            elif("continue" in command):
+                print("continue")
+                browser.continue_show(" ".join(parameters))
+            elif("pause" in command or "play" in command):
+                print("paused/unpaused")
+                browser.togglePause()
+            elif("fullscreen" in command):
+                print("fullscreen")
+                if("disable" in " ".join(parameters[0])):
+                    browser.disable_fullscreen()
+                else:
+                    browser.enable_fullscreen()
             else:
                 print("Couldn't understand command")
-        except:
-            print("Error occured, say command again...")
+        except Exception as inst:
+            print("Error occured, say command again...", inst)
             
     time.sleep(5)
 

@@ -3,13 +3,14 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 import time
+import json
 
 options = Options()
 options.add_argument("user-data-dir=C:\\Users\\ottoj\\AppData\\Local\\Google\\Chrome\\User Data")
 options.add_experimental_option("useAutomationExtension", False)
 options.add_experimental_option("excludeSwitches",["enable-automation"])
 driver = webdriver.Chrome(executable_path="chromedriver.exe", options=options)
-driver.get("https://9anime.to/filter?language%5B%5D=subbed&keyword=Cowboy+Bebop")
+driver.get("https://9anime.to/")
 
 def disable_fullscreen():
   action = ActionChains(driver)
@@ -19,13 +20,6 @@ def enable_fullscreen():
   action = ActionChains(driver)
   videoPlayer = driver.find_element_by_id('player')
   action.double_click(videoPlayer).perform()
-
-def watch():
-  showUrl = "steinsgate.1rx"
-  episodeUrl = "ep-23"
-  url = "https://9anime.to/watch/"+ showUrl + "/" + episodeUrl
-  driver.get(url)
-  time.sleep(5)
 
 def search(searhStrings):
   searchString = "+".join(searhStrings)
@@ -37,9 +31,38 @@ def selectPoster(number):
   item = items[number-1]
   item.click()
 
+def togglePause():
+  videoPlayer = driver.find_element_by_id('player')
+  videoPlayer.click()
+
 def selectEpisode(number):
   episodes = driver.find_element_by_id("episodes")
   items = episodes.find_elements_by_tag_name("li")
   item = items[number-1]
   item.click()
 
+def save(name):
+  if(not name):
+    name = "default"
+  url = driver.current_url
+  jsonFile = open("data.json", mode="r")
+  savedShows = json.load(jsonFile)
+  jsonFile.close()
+  savedShows.update({name: url})
+  jsonFile = open('data.json', mode='w')
+  json.dump(savedShows, jsonFile)
+  jsonFile.close()
+
+def continue_show(name):
+  if(not name):
+    name = "default"
+  with open('data.json') as file:
+    savedShows = json.load(file)
+    url = savedShows[name]
+    driver.get(url)
+
+def selectEpisode(number):
+  episodes = driver.find_element_by_id("episodes")
+  items = episodes.find_elements_by_tag_name("li")
+  item = items[number-1]
+  item.click()
