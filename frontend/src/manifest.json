@@ -1,0 +1,9 @@
+{
+  "name": "{{ name }}",
+  "short_name": "{{ name }}",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#efefef",
+  "theme_color": "#171717"
+}

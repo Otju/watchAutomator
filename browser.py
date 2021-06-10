@@ -17,7 +17,7 @@ print(relativePath("webdriver/extensions/ublock_origin-1.35.2-an+fx.xpi"))
 driver.install_addon(relativePath("webdriver/extensions/ublock_origin-1.35.2-an+fx.xpi"))
 driver.install_addon(relativePath("webdriver/extensions/https_everywhere-2021.4.15-an+fx.xpi"))
 driver.get("https://9anime.to/")
-driver.fullscreen_window()
+#driver.fullscreen_window()
 
 
 def disable_fullscreen():

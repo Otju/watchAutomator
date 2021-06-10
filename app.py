@@ -1,9 +1,9 @@
-from flask import Flask
+from flask import Flask, render_template
 import browser
 import json
 from flask import jsonify
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder="frontend/build", template_folder="frontend/build")
 
 def formatName(name):
     return name.replace("+", " ")
@@ -14,8 +14,8 @@ def sendJson(json):
     return response
 
 @app.route("/")
-def hello_world():
-    return ""
+def preact():
+    return render_template('index.html')
 
 @app.route('/search/<searchString>', methods=['POST'])
 def search(searchString):

@@ -53,7 +53,7 @@ const ItemSelect = ({ handler, saved, setSaved }) => {
 }
 
 const Main = () => {
-  const [selectedIndex, setSelectedIndex] = useState(4)
+  const [selectedIndex, setSelectedIndex] = useState(3)
   const [text, setText] = useState('')
   const [saved, setSaved] = useState([])
 
