@@ -1,16 +1,24 @@
 from selenium import webdriver
 from selenium.webdriver import ActionChains
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
-import time
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 import json
+import os
+import atexit
 
-options = Options()
-options.add_argument("user-data-dir=C:\\Users\\ottoj\\AppData\\Local\\Google\\Chrome\\User Data")
-options.add_experimental_option("useAutomationExtension", False)
-options.add_experimental_option("excludeSwitches",["enable-automation"])
-driver = webdriver.Chrome(executable_path="chromedriver.exe", options=options)
+def relativePath(path):
+  dirname = os.path.dirname(__file__)
+  return os.path.join(dirname, path.replace("/", "\\"))
+
+profile = webdriver.FirefoxProfile() 
+firefox_dev_binary = FirefoxBinary(r'C:\Program Files\Firefox Developer Edition\firefox.exe')
+driver = webdriver.Firefox(firefox_binary=firefox_dev_binary, executable_path='webdriver/geckodriver.exe')
+print(relativePath("webdriver/extensions/ublock_origin-1.35.2-an+fx.xpi"))
+driver.install_addon(relativePath("webdriver/extensions/ublock_origin-1.35.2-an+fx.xpi"))
+driver.install_addon(relativePath("webdriver/extensions/https_everywhere-2021.4.15-an+fx.xpi"))
 driver.get("https://9anime.to/")
+driver.fullscreen_window()
+
 
 def disable_fullscreen():
   action = ActionChains(driver)
@@ -21,13 +29,15 @@ def enable_fullscreen():
   videoPlayer = driver.find_element_by_id('player')
   action.double_click(videoPlayer).perform()
 
-def search(searhStrings):
-  searchString = "+".join(searhStrings)
+def search(searchString):
   url = "https://9anime.to/filter?language%5B%5D=subbed&keyword=" + searchString
   driver.get(url)
 
+def getPosters():
+  return driver.find_elements_by_class_name("poster")
+
 def selectPoster(number):
-  items = driver.find_elements_by_class_name("poster")
+  items = getPosters()
   item = items[number-1]
   item.click()
 
@@ -35,11 +45,15 @@ def togglePause():
   videoPlayer = driver.find_element_by_id('player')
   videoPlayer.click()
 
-def selectEpisode(number):
+def getEpisodes():
   episodes = driver.find_element_by_id("episodes")
-  items = episodes.find_elements_by_tag_name("li")
+  return episodes.find_elements_by_tag_name("li")
+
+def selectEpisode(number):
+  items = getEpisodes()
   item = items[number-1]
   item.click()
+
 
 def save(name):
   if(not name):
@@ -49,6 +63,15 @@ def save(name):
   savedShows = json.load(jsonFile)
   jsonFile.close()
   savedShows.update({name: url})
+  jsonFile = open('data.json', mode='w')
+  json.dump(savedShows, jsonFile)
+  jsonFile.close()
+
+def delete(name):
+  jsonFile = open("data.json", mode="r")
+  savedShows = json.load(jsonFile)
+  jsonFile.close()
+  savedShows.pop(name, None)
   jsonFile = open('data.json', mode='w')
   json.dump(savedShows, jsonFile)
   jsonFile.close()
@@ -66,3 +89,19 @@ def selectEpisode(number):
   items = episodes.find_elements_by_tag_name("li")
   item = items[number-1]
   item.click()
+
+def refresh():
+  driver.refresh()
+
+def scrollDown():
+  driver.execute_script("window.scrollTo(0, window.scrollY + 500)") 
+
+def scrollUp():
+  driver.execute_script("window.scrollTo(0, window.scrollY - 500)") 
+
+
+def exit_handler():
+    print('Closing...')
+    driver.close()
+
+atexit.register(exit_handler)
