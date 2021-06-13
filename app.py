@@ -89,5 +89,39 @@ def getShows():
     count = len(shows)
     return sendJson({"count": count})
 
+@app.route('/next', methods=['POST'])    
+def next():
+    browser.next()
+    return ""
+
+@app.route('/prev', methods=['POST'])    
+def prev():
+    browser.prev()
+    return ""
+
+@app.route('/volumeup', methods=['POST'])    
+def volumeup():
+    browser.volumeUp()
+    return ""
+
+@app.route('/volumedown', methods=['POST'])    
+def volumedown():
+    browser.volumeDown()
+    return ""
+
+@app.route('/hide', methods=['POST'])    
+def hide():
+    browser.hide()
+    return ""
+
+@app.route('/forward/<duration>', methods=['POST'])    
+def forward(duration):
+    browser.forward(duration)
+    return ""
+
+@app.route('/backward/<duration>', methods=['POST'])    
+def backward(duration):
+    browser.backward(duration)
+    return ""
 
 

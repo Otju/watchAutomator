@@ -33,13 +33,20 @@ body {
   margin-top: 80px;
   flex-direction: column;
 }
+
 .footer {
   position: absolute;
+  display: flex;
+  flex-direction: column;
   bottom: 0;
-  height: 80px;
+  height: 240px;
   width: 100%;
+}
+
+.footerRow {
   display: flex;
   flex-direction: row;
+  height: 80px;
 }
 
 .topBar {
@@ -98,6 +105,12 @@ button {
   flex-grow: 1;
 }
 
+.buttonContainerVertical {
+  display: flex;
+  flex-direction: row;
+  width: 25%;
+}
+
 .deleteButton {
   background: none;
   font-size: 20px;
@@ -113,4 +126,10 @@ button {
   border-radius: 4px;
   width: 80%;
   word-wrap: break-word;
+}
+
+.skipText {
+  position: absolute;
+  top: 18px;
+  font-size: 14px;
 }
